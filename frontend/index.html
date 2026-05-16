@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Resume Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>AI Resume Analyzer</h1>
+
+        <textarea
+            id="resumeText"
+            placeholder="Paste resume text here..."
+        ></textarea>
+
+        <button onclick="analyzeResume()">
+            Analyze Resume
+        </button>
+
+        <div id="result"></div>
+
+        <h2>Analysis History</h2>
+
+        <button onclick="loadAnalyses()">
+            Load Analyses
+        </button>
+
+        <div id="history"></div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
