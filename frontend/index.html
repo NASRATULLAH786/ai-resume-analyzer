@@ -1,37 +1,409 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AI Resume Analyzer</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Resume Analyzer</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f7fb;
+      color: #1f2937;
+    }
+
+    .container {
+      max-width: 1150px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #2563eb, #0f172a);
+      color: white;
+      padding: 35px;
+      border-radius: 18px;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+    }
+
+    .header p {
+      margin: 0;
+      color: #dbeafe;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    textarea {
+      width: 100%;
+      height: 260px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      padding: 14px;
+      resize: vertical;
+      font-size: 14px;
+      line-height: 1.5;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    button {
+      margin-top: 14px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .secondary-btn {
+      width: 100%;
+      background: #0f172a;
+    }
+
+    .secondary-btn:hover {
+      background: #111827;
+    }
+
+    .status {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 10px;
+      background: #f3f4f6;
+      min-height: 45px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .loading {
+      background: #e0f2fe;
+      color: #075985;
+    }
+
+    .workflow-box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .workflow-box strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .analysis-card {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .analysis-card strong {
+      color: #111827;
+    }
+
+    .score-box {
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      text-align: center;
+      font-size: 20px;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 850px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .header h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h1>AI Resume Analyzer</h1>
+  <div class="header">
+    <h1>AI Resume Analyzer</h1>
+    <p>
+      Analyze candidate resumes, evaluate technical skills,
+      calculate candidate score, and generate AI-style hiring insights.
+    </p>
+  </div>
 
-        <textarea
-            id="resumeText"
-            placeholder="Paste resume text here..."
-        ></textarea>
+  <div class="grid">
 
-        <button onclick="analyzeResume()">
-            Analyze Resume
-        </button>
+    <div class="card">
+      <h2>Resume Input</h2>
 
-        <div id="result"></div>
+      <textarea
+        id="resumeText"
+        placeholder="Paste candidate resume here...
 
-        <h2>Analysis History</h2>
+Example:
+Python developer with experience in FastAPI, SQL, REST APIs, automation workflows, JavaScript, and AI tools."
+      ></textarea>
 
-        <button onclick="loadAnalyses()">
-            Load Analyses
-        </button>
+      <button onclick="analyzeResume()">Analyze Resume</button>
 
-        <div id="history"></div>
-
+      <div id="statusBox" class="status">
+        Ready to evaluate candidate resume workflows.
+      </div>
     </div>
 
-    <script src="script.js"></script>
+    <div class="card">
+      <h2>Analysis Workflow</h2>
+
+      <div class="workflow-box">
+        <strong>Skill Detection</strong>
+        Detects technical and operational skills from resume text.
+        <div class="badge">Skill Analysis</div>
+      </div>
+
+      <div class="workflow-box">
+        <strong>Candidate Scoring</strong>
+        Calculates candidate strength based on detected technologies.
+        <div class="badge">Resume Evaluation</div>
+      </div>
+
+      <div class="workflow-box">
+        <strong>Hiring Suggestions</strong>
+        Generates automated improvement recommendations.
+        <div class="badge">AI Recommendation</div>
+      </div>
+    </div>
+
+    <div class="card full-width">
+      <h2>Analysis Result</h2>
+
+      <div id="resultBox" class="status">
+        No resume analyzed yet.
+      </div>
+    </div>
+
+    <div class="card full-width">
+      <h2>Resume Analysis History</h2>
+
+      <button class="secondary-btn" onclick="loadAnalyses()">
+        Load Analysis History
+      </button>
+
+      <div id="historyBox" class="status">
+        Click the button to load previous analyses.
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const API_BASE_URL = "http://127.0.0.1:8083";
+
+async function analyzeResume() {
+
+  const resumeText = document.getElementById("resumeText").value.trim();
+  const statusBox = document.getElementById("statusBox");
+  const resultBox = document.getElementById("resultBox");
+
+  if (!resumeText) {
+    statusBox.className = "status error";
+    statusBox.innerText = "Please paste a resume before analysis.";
+    return;
+  }
+
+  statusBox.className = "status loading";
+  statusBox.innerText = "Analyzing candidate resume workflow...";
+
+  resultBox.className = "status loading";
+  resultBox.innerText = "Evaluating candidate skills and scoring profile...";
+
+  try {
+
+    const response = await fetch(`${API_BASE_URL}/analyze-resume`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        resume_text: resumeText
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detail || "Failed to analyze resume.");
+    }
+
+    const analysis = data.analysis;
+
+    statusBox.className = "status success";
+    statusBox.innerText = data.message;
+
+    resultBox.className = "status";
+
+    resultBox.innerHTML = `
+      <div class="score-box">
+        Candidate Score: ${analysis.score}/100
+      </div>
+
+      <div class="analysis-card">
+        <strong>Candidate Level</strong>
+        <p>${analysis.level}</p>
+      </div>
+
+      <div class="analysis-card">
+        <strong>Skills Found</strong>
+        <p>${analysis.skills_found.join(", ")}</p>
+      </div>
+
+      <div class="analysis-card">
+        <strong>Suggestions</strong>
+        <ul>
+          ${analysis.suggestions.map(item => `<li>${item}</li>`).join("")}
+        </ul>
+      </div>
+
+      <div class="analysis-card">
+        <strong>Status</strong>
+        <p>${analysis.status}</p>
+      </div>
+    `;
+
+    loadAnalyses();
+
+  } catch (error) {
+
+    statusBox.className = "status error";
+    statusBox.innerText = error.message;
+
+    resultBox.className = "status error";
+    resultBox.innerText = "Resume analysis failed.";
+
+  }
+}
+
+async function loadAnalyses() {
+
+  const historyBox = document.getElementById("historyBox");
+
+  historyBox.className = "status loading";
+  historyBox.innerText = "Loading resume analysis history...";
+
+  try {
+
+    const response = await fetch(`${API_BASE_URL}/analyses`);
+    const analyses = await response.json();
+
+    if (!response.ok) {
+      throw new Error("Failed to load analysis history.");
+    }
+
+    if (!analyses.length) {
+      historyBox.className = "status";
+      historyBox.innerText = "No analysis history found.";
+      return;
+    }
+
+    historyBox.className = "status";
+
+    historyBox.innerHTML = analyses.map(item => `
+      <div class="analysis-card">
+
+        <strong>Score:</strong> ${item.score}/100<br>
+        <strong>Level:</strong> ${item.level}<br><br>
+
+        <strong>Skills:</strong>
+        <p>${item.skills_found.join(", ")}</p>
+
+        <strong>Suggestions:</strong>
+        <ul>
+          ${item.suggestions.map(s => `<li>${s}</li>`).join("")}
+        </ul>
+
+      </div>
+    `).join("");
+
+  } catch (error) {
+
+    historyBox.className = "status error";
+    historyBox.innerText = error.message;
+
+  }
+}
+
+</script>
 
 </body>
 </html>
